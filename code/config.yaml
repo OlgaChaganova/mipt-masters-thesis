@@ -1,0 +1,25 @@
+DATA_DIR : '/home/jovyan/Linnaeus 5/Linnaeus 5 128X128/'
+MODELS_DIR : '/home/jovyan/Models/'
+
+IMG_SIZE : 128
+GAMMA : 2.2
+
+# hyperparameters
+BATCH_SIZE : 8
+EPOCHS : 75
+NUM_SET_PARAMS : 1000
+
+
+# parameters of filters
+# canny
+SIGMA : 1
+
+# dilation disk
+RADIUS : 20
+
+# dilation square
+WIDTH : 40
+
+# niblack
+K : 0.8
+WIN_SIZE : 25
