@@ -1,0 +1,57 @@
+\section*{\textbf{INTRODUCTION}}
+
+Nowadays, artificial neural networks (ANNs) are considered universal approximators for analytic functions of any complexity. Theoretical studies have been conducted for feedforward neural networks; in particular, \cite{Hornik} proved that standard perceptron with one or more hidden layers is capable of approximating any Borel measurable function from one finite-dimensional space to another to any desired degree of accuracy. Similar studies for convolutional networks were also conducted by \cite{ZhouCNN}, who showed that a deep convolutional neural network can approximate any continuous function to an arbitrary accuracy when its depth is large enough. But there is still a lack of studies about the neural networks capability of approximating algorithms, particularly image processing algorithms. Many convolutional network architecture families, such as ConvNet, ResNet, UNet, etc., are successfully used used in various image processing tasks  \citep{, CNNSurvey, ConvNetOCR}, including ones with existing algorithmic solutions \citep{CannyOptics, panfilova2020using}. However, it is not obvious that especially for tasks where specialized algorithmic solutions are known, a general-purpose neural network could solve the same task with comparable computational and representational efficiency. To research this aspect, we decided to test the ability of typical NN architectures to approximate individual image processing operations, since difficulties with this simplified problem would indicate deeper issues for use of neural networks as a general-purpose tool for image processing. We chose Canny edge detector and morphological dilation as examples of typical image processing operations since the former is comparatively well-researched from the neural approximation point of view \citep{Fernandez11}, and for the latter there is no exact computationally efficient algorithm anyway.
+
+% \citep{CannyOptics, CannyCloudDetection, panfilova2020using}. However, it is not obvious that especially for tasks where specialized algorithmic solutions are known, a general-purpose neural network could solve the same task with comparable computational and representational efficiency. To research this aspect, we decided to test the ability of typical NN architectures to approximate individual image processing operations, since difficulties with this simplified problem would indicate deeper issues for use of neural networks as a general-purpose tool for image processing. We chose Canny edge detector and morphological dilation as examples of typical image processing operations since the former is comparatively well-researched from the neural approximation point of view \citep{Fernandez11}, and for the latter there is no exact computationally efficient algorithm anyway.
+
+% \subsection*{\textbf{Relevance}}
+
+Approximation of classical image processing algorithms with neural networks is not only interesting from a theoretical point of view but also leads to practical benefits:
+
+% \begin{itemize}
+
+% \item[--] a neural network is trainable, and thus can potentially achieve a better solution to the original problem than the classical algorithm, which is deterministic and whose parameters must be chosen manually. For example, \cite{Jampani2016LearningSH} proposed to learn bilateral filters from data and demonstrated that it leads to performance improvements compared to a fixed parametric form. 
+
+% \item[--] a neural network model can be implemented both on CPUs and GPUs, which development is constantly evolving in speed and power consumption, so the inference of neural network can be significantly faster than the inference of classical algorithm [\cite{Febbo2018KCNN}];
+
+% \item[--] a neural network approximation can replace the classical filter within a more complex system based on ANNs as well, allowing for end-to-end system training [\cite{Yi2016LearnedIFT}].
+
+% \end{itemize}
+
+$(1)$ a neural network is trainable, and thus can potentially achieve a better solution than the classical filter, which is deterministic and whose parameters must be chosen manually. For example, \cite{Jampani2016LearningSH} proposed to learn bilateral filters from data and showed that it leads to performance improvements compared to a fixed parametric form. 
+
+$(2)$ a neural network model can be implemented both on CPUs and GPUs, which development is constantly evolving in speed and power consumption, so the inference of neural network can be significantly faster compared to classical algorithm \citep{Febbo2018KCNN};
+
+$(3)$ a neural network approximation can replace the classical filter within a more complex system based on ANNs as well, allowing for end-to-end system training \citep{Yi2016LearnedIFT}.
+
+The rest of the paper is structured as follows: the following section provides a brief theoretical overview of existing work on approximating classical algorithms with neural networks and approaches to parameterization of the neural networks. The next section includes a description of the experiments and a discussion of the results. Finally, the paper is concluded with a summary and pointers to the possible future work.
+
+
+% \subsection*{\textbf{Neural network approximation of classical algorithms}}
+
+% The first works on the research topic appeared even in the 20th century. For example, (\cite{Ridder99Kuwahara}) investigated the application of neural networks to nonlinear image processing using Kuwahara filter for image smoothing as a target. The authors experimented with several architectures of a network, including single- and double-layer perceptrons with different sizes of the hidden layers and a specially designed modular neural network. Although the authors managed to train the model to smooth the images, the result was still too far from true Kuwahara filter smoothing. The reason for this could be due to unsuitable model architecture and loss function. 
+
+% \cite{Fernandez11} attempted to approximate the Canny and Sobel edge detectors with single-layer perceptron. To take into account the spatial dependence in the images, a pixel and its eight adjacent pixels were fed to the input of the model, which almost corresponds to a convolution with a kernel size of 3x3. The authors didn't manage to achieve a good quality approximation, which can probably be explained by the inability of the single-layer model to learn complex dependencies in the data. However, these studies can be taken as a baseline for subsequent experiments.
+
+
+% \cite{Fernandez11, Ridder99Kuwahara}) used neural networks with typical architecture: just a multi-layer perceptron. A totally different approach was proposed by \cite{Zhukovsky2018}. The authors developed a complete reproduction of the Canny, Niblack, and Harris filters using only neural network operations: convolution, pulling, concatenation, etc., so the algorithm's parameters do not need to be selected manually because their optimal values will be determined during training.
+
+% \subsection*{\textbf{Parameterization approaches}}
+
+% In the previous works, the ability of neural networks to approximate a particular filter with fixed parameters was investigated, and those researches are of more theoretical interest. Even though in real-world applications this approach is acceptable, because a filter with specified parameters is often used, it is necessary to be able to customize the filter parameters when creating and optimizing prototypes of the final system. For example, \cite{CannyCloudDetection} used Canny edge detector to build a system for automatic recognition of cumuliform cloud, and the values of the algorithm parameters were selected experimentally while the development stage. Sometimes it is necessary to give a user the ability to specify the system parameters, as in the case of an ANN-based image pre-compensation system, which must adjust to the parameters of a particular person's eye [\cite{Precompensation}] and thus cannot be retraining for each possible set of parameters.  
+
+  
+% %However, in practical application it is impossible to train a separate model for each separate set of parameters, so it is necessary to build a model that could approximate the filter with any values of parameters from its domain. 
+
+% Model parameterization can be achieved in several ways:
+
+% \begin{itemize}
+%   \item by adding parameters values as metadata to the input image channels. This approach was used in \cite{MultipleInputNN_SoilClay2020}. In order to enrich the data and improve the quality of the model predicting the clay content of the soil, not only remotely sensed values, which constitute the spectral input channel, but also geographic coordinates, which constitute the auxiliary input channels, are fed as an input. This is the simplest way to provide dependence of the model on auxiliary parameters, which does not entail a significant increase in the size of the model, but in some cases, it might be not enough to learn more complex dependencies between parameters and expected output.
+  
+%   \item by parameterizing the convolution kernel. Traditional convolutional kernels are shared for all examples in a dataset, which can significantly decrease the quality of the model in case the data are characterized by a large variability. Conditional Convolutions (or CondConv; \cite{CondConv2020}) and Dynamic Convolutions (or DynamicConv; \cite{DynamicConv2020}) share a common idea: instead of using a single convolution kernel per layer, which is the same for any input, these types of convolutions aggregates multiple convolution kernels, which are input dependent. DynamicConv aggregates several kernels based upon their attentions while CondConv parameterizes the convolutional kernels as a linear combination with example-dependent scalar weights computed using a routing function with learned parameters. Another example of this approach is the Adaptive convolutional neural network (ACNN) presented in \cite{AdaptiveConvolutions2017}. In ACNN the filter weights are generated with a learned sub-network, which is just a multilayer perceptron and whose input is the side information or metadata. Replacing traditional convolution layers by convolutions with adaptive weights can disentangle the variations related to the side information and extract discriminative features related to the current context, but it can significantly increase the size of the model and slow down its inference time.  
+
+  
+%   \item by adding extra input layers for metadata to the neural network. \cite{MultipleInputNN_Water2020} and \cite{EfficientNetMetaData2020} used a multiple-input neural network, which consists of two branches: the first one is a single- or multilayer perceptron that process a vector of metadata and the second one is a convolutional neural network that process an input image. The outputs of these sub-networks are then concatenated and processed with the common part of the network. \cite{Plankton2019} developed this idea and proposed several schemes for metadata incorporation. While in the previous three works metadata was added to a convolutional neural network,  \cite{GCN2021covid19} demonstrated how to add metadata to a graph neural network.
+  
+% \end{itemize}
+

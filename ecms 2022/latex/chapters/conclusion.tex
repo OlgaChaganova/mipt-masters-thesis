@@ -1,0 +1,12 @@
+\section*{\textbf{CONCLUSIONS}}
+
+In this paper, we tested the hypothesis that neural networks can be affectively used to approximate and replace classical image processing operations. We chose two typical image filters, Canny edge detector and grayscale morphological dilation with the disk structuring element. This choice of algorithms allowed us to compare two different approaches to the approximation: classification and regression. As we have seen, neural networks are equally good at both tasks, one only needs to choose the appropriate loss function. 
+
+We use typical convolutional networks architectures like ConvNet, ResNet, and UNet with the standard loss functions (binary cross-entropy and mean squared error), not trying to optimize the architecture for a particular filter. As we have seen, even a small model of a neural network is able to approximate a filter with fixed parameters. The only requirement is the large enough number of hidden layers, which determine the size of the model's receptive field. These results might be considered as an argument in favour of the tested hypothesis, obtained experimentally. 
+
+Since in real-world applications adjustability of filters might be crucial, our next step was to test is it possible to approximate chosen filters with different parameters but using a single model. We considered different approaches to parameterization of the neural networks, but even the simplest of them, adding pamateres in the input images channels, works well. There are still some artifacts, so for the better quality of the approximation, it might need to apply more complex approaches like adding extra layers for parameters only, creating special network blocks, etc. This is the direction of further research.
+
+Using a neural network approximation instead of the classical algorithm has its benefits listed in the introduction. In addition to those, we have found one more advantage of a neural model over the classical implementation of the grayscale morphology. Starting from the specified size of the radius, a neural network works faster than the algorithm (fig. \ref{figure:InferenceTime}) even on one core of the CPU without applying any optimization techniques. 
+
+
+%But there is not so obvious advantage of a neural model before the classical implementation of the grayscale morphology. Starting from the specified size of the radius, a neural network works faster than an algorithm (figure \ref{figure:InferenceTime}) even on one core of the CPU without applying any optimization techniques. 
