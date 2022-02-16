@@ -1,0 +1,100 @@
+\chapter{XSL стиль для формирования отображения сценариев работы ``умной гирлянды''}
+\label{cha:appendix1}
+
+
+\begin{verbatim}
+ <xsl:stylesheet version="1.0"
+   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+   xmlns="http://www.w3.org/2000/svg">
+
+<!-- Число периодов. Считывается из xml. -->
+<xsl:param name="number_of_iterations">
+  <xsl:for-each select="scenario">
+      <xsl:value-of select="number_of_periods"/>
+  </xsl:for-each>
+</xsl:param>
+
+<!-- Размер квадратной ячейки.--> 
+<!--Рассчитывается изходя из количества периодов-->
+<xsl:param name="cell_size">
+ <xsl:if test="22 &lt; $number_of_iterations ">
+      <xsl:value-of select="900 div $number_of_iterations"/>
+ </xsl:if>
+  <xsl:if test="$number_of_iterations &lt;= 22 ">
+    <!-- Значение по умолчанию, если периодов мало.-->
+    <xsl:value-of select="40"/>
+ </xsl:if>
+</xsl:param>
+
+<!-- Название описываемого мода (сценария) -->
+<xsl:param name="mode_name">
+  <xsl:for-each select="scenario">
+      <xsl:value-of select="mode_name"/>
+  </xsl:for-each>
+</xsl:param>
+
+<!-- Длительность одного периода -->
+<xsl:param name="one_period_duration">
+  <xsl:for-each select="scenario">
+      <xsl:value-of select="one_period_duration"/>
+  </xsl:for-each>
+</xsl:param>
+
+<xsl:output method="xml" indent="yes" />
+<xsl:template match="/">
+   <html>
+   <body>
+   <h2><xsl:value-of select="$mode_name" /></h2>
+   <h4>По оси x распологаются блоки временных периодов
+   длительностью в <xsl:value-of select="$one_period_duration" /> 
+   миллисекунд 
+   <br />
+   По оси y расположены блоки обозначающие лампы. 
+   (n - порядковый номер лампы)
+   </h4>
+   <table border="1">
+     
+     <tr bgcolor="#9acd32">
+      <!-- Заполнение верхней ячейки таблицы. -->
+     <th width="{$cell_size}">n/t</th>
+      
+      <!-- Заполнение первого столбца номрами ламп. -->
+      <xsl:call-template name="while_alowed_add_cell">
+				<xsl:with-param name="VALUE" select="0"/>
+			</xsl:call-template>
+     </tr>
+
+     <xsl:for-each select="scenario/lamp">
+     <tr>
+     <!-- Заполнение первой строки номерами итераций. -->
+     <th bgcolor='#9acd32'><xsl:value-of select="@id"/></th>
+     <!-- Заполнение таблицы. -->
+     <xsl:for-each select="state">
+      <td width="{$cell_size}" height ="{$cell_size}" 
+      bgcolor='{@color}'></td>
+     </xsl:for-each>
+     </tr>
+     </xsl:for-each>
+   </table>
+   </body>
+   </html>
+</xsl:template>
+
+<!-- Заполяняет столбец цифрами от VALUE до number_of_iterations -->
+<xsl:template name="while_alowed_add_cell">
+ <xsl:param name="VALUE"/>
+
+  <th height ="{$cell_size}" width="{$cell_size}"> 
+   <xsl:value-of select="$VALUE" /> 
+  </th>
+
+ <xsl:if test="$VALUE != $number_of_iterations - 1">
+      <xsl:call-template name="while_alowed_add_cell">
+				<xsl:with-param name="VALUE" select="$VALUE + 1"/>
+			</xsl:call-template>
+ </xsl:if>
+</xsl:template>
+
+</xsl:stylesheet> 
+
+\end{verbatim}

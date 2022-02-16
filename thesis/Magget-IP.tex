@@ -1,0 +1,44 @@
+%% Преамбула TeX-файла
+
+% 1. Стиль и язык
+\documentclass[utf8x]{G7-32} % Стиль (по умолчанию будет 14pt)
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+% Остальные стандартные настройки убраны в preamble.inc.tex.
+\include{preamble.inc}
+
+% Настройки листингов.
+\include{listings.inc}
+
+% Полезные макросы листингов.
+\include{macros.inc}
+
+\title{Разработка технологии управления распределенной системой “умного освещения” с элементами искусственного интеллекта}
+\author{Егор Соловьев }
+\date{02.03.2015}
+
+\begin{document}
+
+
+% Команды \breakingbeforechapters и \nonbreakingbeforechapters
+% управляют разрывом страницы перед главами.
+% По-умолчанию страница разрывается.
+
+% \nobreakingbeforechapters
+% \breakingbeforechapters
+
+
+ 
+
+\include{7-IP} 
+
+ 
+ 
+\include{81-biblio}      % Список литературы 
+
+ 
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
